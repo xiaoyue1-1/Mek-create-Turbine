@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.146'
+}
+
+group = 'com.mekcreateturbine'
+version = project.mod_version
+
+base {
+    archivesName = project.mod_id
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(project.java_version as int)
+    }
+}
+
+repositories {
+    mavenCentral()
+    // Modrinth maven hosts Mekanism & Create release jars used at compile/runtime.
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+    }
+}
+
+dependencies {
+    // Mekanism (required: we reuse its blocks/tiles: disperser/coil/condenser/complex/rotor/glass)
+    implementation "maven.modrinth:mekanism:${project.mekanism_version}"
+    // Mekanism Generators (required: turbine data/validator/tile internals live here)
+    implementation "maven.modrinth:mekanism-generators:${project.mekanism_version}"
+    // Create (optional at runtime; soft dependency gated by ModList check)
+    implementation "maven.modrinth:create:${project.create_version}"
+    // Create ships ponder/flywheel/Registrate as jar-in-jar; use extracted copies for compilation
+    // (runtime provides them from inside the Create jar automatically).
+    compileOnly files('libs/ponder-neoforge-1.0.82+mc1.21.1.jar')
+    compileOnly files('libs/flywheel-neoforge-1.21.1-1.0.6.jar')
+    compileOnly files('libs/Registrate-MC1.21-1.3.0+67.jar')
+    // JEI - dev-runtime only so the test client has it (addon does not depend on it).
+    // Downloaded the NeoForge build directly (Modrinth maven resolves multi-loader versions to Fabric).
+    runtimeOnly files('libs/jei-1.21.1-neoforge-19.52.0.424.jar')
+    // Jade (Waila) - compile API + dev-runtime so the overlay shows live turbine data.
+    compileOnly files('libs/Jade-1.21.1-NeoForge-15.10.6.jar')
+    runtimeOnly files('libs/Jade-1.21.1-NeoForge-15.10.6.jar')
+}
+
+neoForge {
+    version = project.neoforge_version
+
+    runs {
+        client { client() }
+        server { server() }
+        data { data() }
+    }
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+// Reobfuscation name stays default (SRG mappings under NeoForge).
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// NOTE on dev-runtime of other mods:
+// Mekanism/Create release jars are SRG-mapped. In a ModDevGradle dev environment this
+// normally works for compile+runtime, but if you hit NoSuchMethod/remap errors you must run
+// with their *deobf/dev* artifacts (build them locally or fetch NeoForge dev builds) instead
+// of the Modrinth release jars. TODO(env): confirm once first build runs.

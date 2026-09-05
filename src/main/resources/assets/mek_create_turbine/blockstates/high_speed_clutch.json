@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mek_create_turbine:block/high_speed_clutch"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "mek_create_turbine:block/mechanical_turbine_valve"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [" c ", "cCc", " c "],
+  "key": {
+    "c": { "tag": "mek_create_turbine:mct_casing" },
+    "C": { "item": "create:clutch" }
+  },
+  "result": {
+    "id": "mek_create_turbine:high_speed_clutch",
+    "count": 1
+  }
+}

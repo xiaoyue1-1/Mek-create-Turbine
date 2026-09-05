@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "mekanismgenerators:turbine_casing",
+    "mek_create_turbine:mechanical_turbine_casing"
+  ]
+}

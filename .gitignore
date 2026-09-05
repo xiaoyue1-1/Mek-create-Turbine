@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+
+# Dev runs / logs
+run/
+logs/
+crash-reports/
+run-client.log
+.runclient-retry.pid
+.runclient.pid
+
+# Local machine helper scripts & build artifact
+compile-retry.cmd
+compile-retry.ps1
+runclient-retry.ps1
+mek_create_turbine-*.jar
+
+# Third-party jars fetched for dev compile/runtime (regenerate per README)
+libs/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store

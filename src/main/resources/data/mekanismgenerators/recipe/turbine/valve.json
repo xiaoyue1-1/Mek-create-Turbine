@@ -1,0 +1,12 @@
+{
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:barrier"
+                        }
+                    ],
+    "result":  {
+                   "id":  "minecraft:stone",
+                   "count":  1
+               },
+    "type":  "minecraft:crafting_shapeless"
+}

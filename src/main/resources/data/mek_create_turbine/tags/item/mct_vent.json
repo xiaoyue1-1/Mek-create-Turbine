@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "mek_create_turbine:mechanical_turbine_vent",
+    "mekanismgenerators:turbine_vent"
+  ]
+}

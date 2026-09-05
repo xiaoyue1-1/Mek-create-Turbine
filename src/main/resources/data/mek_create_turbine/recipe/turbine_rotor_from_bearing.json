@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "tag": "mek_create_turbine:mct_bearing" }
+  ],
+  "result": {
+    "id": "mekanismgenerators:turbine_rotor",
+    "count": 1
+  }
+}

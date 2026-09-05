@@ -1,0 +1,39 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+issueTrackerURL = ""
+
+[[mods]]
+modId = "mek_create_turbine"
+version = "0.1.0"
+displayName = "Mek Create Turbine"
+authors = "you"
+description = '''
+Steam turbine that can also output Create rotational force.
+Mechanical mode: output stress to Create, no electricity output.
+Shell blocks are own; internals reuse Mekanism blocks (disperser/coil/condenser/complex/rotor/structural glass).
+'''
+
+# Mekanism is required: internals & framework are reused.
+[[dependencies.mek_create_turbine]]
+    modId = "mekanism"
+    mandatory = true
+    versionRange = "[10.7,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+# Create is optional: without it the mod runs in ELECTRICAL-only mode.
+[[dependencies.mek_create_turbine]]
+    modId = "create"
+    mandatory = false
+    versionRange = "[6.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+# NeoForge is implied; declare for correctness.
+[[dependencies.mek_create_turbine]]
+    modId = "neoforge"
+    mandatory = true
+    versionRange = "[21.1,)"
+    ordering = "NONE"
+    side = "BOTH"

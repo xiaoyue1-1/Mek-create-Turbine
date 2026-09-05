@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "mek_create_turbine:turbine_bearing",
+    "mekanismgenerators:turbine_rotor"
+  ]
+}

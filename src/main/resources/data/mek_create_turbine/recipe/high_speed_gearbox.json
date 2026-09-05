@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [" c ", "cGc", " c "],
+  "key": {
+    "c": { "tag": "mek_create_turbine:mct_casing" },
+    "G": { "item": "create:rotation_speed_controller" }
+  },
+  "result": {
+    "id": "mek_create_turbine:high_speed_gearbox",
+    "count": 1
+  }
+}
