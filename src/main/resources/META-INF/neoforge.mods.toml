@@ -5,7 +5,7 @@ issueTrackerURL = "https://github.com/xiaoyue1-1/Mek-create-Turbine/issues"
 
 [[mods]]
 modId = "mek_create_turbine"
-version = "0.1.0"
+version = "0.2.0"
 displayName = "Mek Create Turbine"
 authors = "xiaoyue1-1"
 description = '''
