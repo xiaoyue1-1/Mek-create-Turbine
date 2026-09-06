@@ -1,13 +1,13 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 license = "MIT"
-issueTrackerURL = ""
+issueTrackerURL = "https://github.com/xiaoyue1-1/Mek-create-Turbine/issues"
 
 [[mods]]
 modId = "mek_create_turbine"
 version = "0.1.0"
 displayName = "Mek Create Turbine"
-authors = "you"
+authors = "xiaoyue1-1"
 description = '''
 Steam turbine that can also output Create rotational force.
 Mechanical mode: output stress to Create, no electricity output.
@@ -22,10 +22,18 @@ Shell blocks are own; internals reuse Mekanism blocks (disperser/coil/condenser/
     ordering = "AFTER"
     side = "BOTH"
 
-# Create is optional: without it the mod runs in ELECTRICAL-only mode.
+# Mekanism Generators is required: turbine data/validator/rotor/blade internals live here.
+[[dependencies.mek_create_turbine]]
+    modId = "mekanismgenerators"
+    mandatory = true
+    versionRange = "[10.7,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+# Create is required: the mechanical (stress) output uses its kinetic API.
 [[dependencies.mek_create_turbine]]
     modId = "create"
-    mandatory = false
+    mandatory = true
     versionRange = "[6.0,)"
     ordering = "AFTER"
     side = "BOTH"

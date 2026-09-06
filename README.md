@@ -82,7 +82,7 @@ See [Releases](https://github.com/xiaoyue1-1/Mek-create-Turbine/releases). Place
 
 ## Mod dependencies / 依赖
 
-`neoforge.mods.toml` declares: `mekanism` (required / 必需), `create` (optional; required for rotational output / 可选，应力输出必需), `neoforge`.
+`neoforge.mods.toml` declares (all required / 全部必需): `mekanism`, `mekanismgenerators`, `create`, `neoforge`.
 
 ## Credits & licensing / 致谢与许可
 
