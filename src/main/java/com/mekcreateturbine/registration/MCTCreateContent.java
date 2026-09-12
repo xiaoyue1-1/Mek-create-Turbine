@@ -78,11 +78,11 @@ public final class MCTCreateContent {
         @Override
         public <T extends BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(
               Level level, BlockState state, net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
-            return (l, s, st, tile) -> {
-                if (tile instanceof KineticHighSpeedGearboxTile gearbox) {
-                    gearbox.tick();
-                }
-            };
+            // Use Create's own ticker so the kinetic lifecycle (initialize/first tick/lazy tick and
+            // the attachKinetics timing) matches Create's expectations. A hand-rolled ticker called
+            // tick() out of order and could make a new source propagate into a stress gauge whose
+            // network was not initialised yet (Create StressGauge NPE).
+            return new com.simibubi.create.foundation.blockEntity.SmartBlockEntityTicker<>();
         }
 
         @Override
@@ -93,19 +93,27 @@ public final class MCTCreateContent {
 
     public static class KineticHighSpeedGearboxTile extends GeneratingKineticBlockEntity {
 
-        private float activeSpeed;
         private float activeCapacity;
-        private boolean running;
         private long lastCap;
-        private int timer;
-        private int warmup;
+        private boolean running;
 
         public KineticHighSpeedGearboxTile(BlockEntityType<?> type, BlockPos pos, BlockState state) {
             super(type, pos, state);
         }
 
         private static final float SPEED = 128F;
-        private static final int WARMUP_TICKS = 40;
+
+        @Override
+        public void initialize() {
+            super.initialize();
+            // Become a spinning source immediately on load, before any neighbour runs
+            // attachKinetics(). Otherwise an attached cogwheel sees a 0-speed neighbour and
+            // Create's propagator destroys it as an invalid self-network cycle.
+            running = true;
+            if (level != null && !level.isClientSide) {
+                updateGeneratedRotation();
+            }
+        }
 
         @Override
         public void tick() {
@@ -113,34 +121,23 @@ public final class MCTCreateContent {
             if (level == null || level.isClientSide) {
                 return;
             }
-            timer++;
             MechanicalTurbineData data = findTurbine();
             boolean wantRunning = data != null && data.isFormed() && data.outputMode == OutputMode.MECHANICAL;
             float capacity = wantRunning ? data.getMechanicalStressCapacity() : 0;
             if (!running) {
-                // Delay becoming a Create source until chunk/network initialisation has settled.
-                if (!wantRunning || warmup < WARMUP_TICKS) {
-                    warmup++;
+                if (!wantRunning) {
                     return;
                 }
                 running = true;
                 activeCapacity = capacity;
                 lastCap = (long) capacity;
-                timer = 0;
                 updateGeneratedRotation();
-            } else if (timer >= 20 && Math.abs(capacity - lastCap) > lastCap * 0.05F) {
-                // Slow refresh of published capacity (only on meaningful change).
+            } else if (capacity != lastCap) {
                 activeCapacity = capacity;
                 lastCap = (long) capacity;
-                timer = 0;
-                updateGeneratedRotation();
+                notifyStressCapacityChange(Math.max(1F, capacity / SPEED));
             }
-            if (!wantRunning) {
-                running = false;
-                activeCapacity = 0;
-                warmup = 0;
-                updateGeneratedRotation();
-            } else if (data != null) {
+            if (data != null) {
                 data.setMechanicalLoad(1.0F);
             }
         }
